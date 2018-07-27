@@ -48,6 +48,10 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->bind('path.public', function() {
+    return __DIR__ . 'public/';
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -87,13 +91,14 @@ $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 $app->configure('auth');
-
-$app->bind('path.public', function() {
-    return __DIR__ . 'public/';
-});
 $app->configure('modules');
-$app->register(\Nwidart\Modules\LumenModulesServiceProvider::class);
 
+$app->register(\Nwidart\Modules\LumenModulesServiceProvider::class);
+$app->register(\Nord\Lumen\Cors\CorsServiceProvider::class);
+
+$app->middleware([
+    'cors' => Nord\Lumen\Cors\CorsMiddleware::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
